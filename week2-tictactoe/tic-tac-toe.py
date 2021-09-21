@@ -10,6 +10,37 @@ def main():
     grid = create_grid(grid_squared)
     draw_grid(grid, n_digits)
 
+    game_finished = False;
+    incorrect_number = True
+    player_x = 'X'
+    player_o = 'O'
+
+    while game_finished != True:
+        x_selection = int(input(f"x's turn to choose a square (1-{max_val}): "))
+        while incorrect_number != False:
+            if x_selection < 1 or x_selection > max_val:
+                incorrect_number = True
+                x_selection = int(input(f"Incorrect value. Please choose a value between 1 and {max_val}): "))
+            else:
+                incorrect_number = False
+
+        updated_grid = change_element(x_selection, grid, player_x)
+        draw_grid(updated_grid, n_digits)
+
+        o_selection = int(input(f"o's turn to choose a square (1-{max_val}): "))
+        while incorrect_number != False:
+            if x_selection < 1 or x_selection > max_val:
+                incorrect_number = True
+                x_selection = int(input(f"Incorrect value. Please choose a value between 1 and {max_val}): "))
+            else:
+                incorrect_number = False
+
+        updated_grid = change_element(o_selection, grid, player_o)
+        draw_grid(updated_grid, n_digits) 
+        game_finished = win_checker(updated_grid)
+        break
+            
+
 
 def create_grid(n_rows_cols=3):
     rows = []
@@ -22,7 +53,6 @@ def create_grid(n_rows_cols=3):
         rows.append(new_row)
     
     return rows
-
 
 def draw_grid(grid_array, n_digits):
     print()
@@ -52,7 +82,16 @@ def draw_grid(grid_array, n_digits):
             print()
     print()
 
+def change_element(number, grid_array, player):
+    for row in grid_array:
+        for element in row:
+            if number == element:
+                element_index = row.index(element)
+                row[element_index] = player
+                return grid_array
 
+def win_checker(grid_array):
+    pass
 
 
 if __name__ == '__main__':
