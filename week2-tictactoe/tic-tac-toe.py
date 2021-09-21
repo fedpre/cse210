@@ -31,13 +31,16 @@ def main():
         number_chosen.append(x_selection)
         updated_grid = change_element(x_selection, grid, player_x)
         draw_grid(updated_grid, n_digits)
-        is_finished, winner = win_checker(updated_grid, player_x, player_o)
-        is_draw = draw_checker(updated_grid)
-        if is_finished:
-            print(f"Congratulations player {winner}! You won the game")
+        status = status_checker(updated_grid, player_x, player_o, max_val)
+        
+        if status == 'player_x':
+            print(f"Congratulations player X! You won the game")
             game_finished = True
-        elif is_draw:
-            print(f"Thanks for playing the game. It is a draw")
+        elif status == 'player_o':
+            print(f"Congratulations player X! You won the game")
+            game_finished = True
+        elif status == 'draw':
+            print('Draw. Thanks for playing the game.')
             game_finished = True
         
         incorrect_number = True
@@ -51,17 +54,25 @@ def main():
                 o_selection = int(input(f"Value already chosen. Please choose a value between 1 and {max_val} not already chosen: "))
             else:
                 incorrect_number = False
+
         number_chosen.append(o_selection)
         updated_grid = change_element(o_selection, grid, player_o)
         draw_grid(updated_grid, n_digits) 
-        is_finished, winner = win_checker(updated_grid, player_x, player_o)
-        is_draw = draw_checker(updated_grid)
-        if is_finished:
-            print(f"Congratulations player {winner}! You won the game")
+
+        
+        status = status_checker(updated_grid, player_x, player_o, max_val)
+        
+        if status == 'player_x':
+            print(f"Congratulations player X! You won the game")
             game_finished = True
-        elif is_draw:
-            print(f"Thanks for playing the game. It is a draw")
+        elif status == 'player_o':
+            print(f"Congratulations player X! You won the game")
             game_finished = True
+        elif status == 'draw':
+            print('Draw. Thanks for playing the game.')
+            game_finished = True
+
+        incorrect_number = True
             
 
 
@@ -82,12 +93,7 @@ def draw_grid(grid_array, n_digits):
     for row in grid_array:
         for element in row:
             print(f"{element:{n_digits}}", end=' ')
-            # if element == row[-1]:
-            #     continue
             print('|', end = ' ')
-        if row == grid_array[-1]:
-            print()
-            continue
         print()
         if n_digits == 1:
             print('--', end = '')
@@ -113,7 +119,25 @@ def change_element(number, grid_array, player):
                 row[element_index] = player
                 return grid_array
 
-def win_checker(grid_array, player_x, player_o):
+def status_checker(grid_array, player_x, player_o, max_val):
+    result1 = horizontal_checker(grid_array, player_x, player_o)
+    result2 = vertical_checker(grid_array, player_x, player_o)
+    result3 = diagonal_checker(grid_array, player_x, player_o)
+    result4 = draw_checker(grid_array, player_x, player_o, max_val)
+    
+    if result1 != None:
+        return result1
+    elif result2 != None:
+        return result2
+    elif result3 != None:
+        return result3
+    elif result4 != None:
+        return result4
+    else:
+        return None
+
+
+def horizontal_checker(grid_array, player_x, player_o):
     player_x_counter = 0
     player_o_counter = 0
     for row in grid_array:
@@ -123,22 +147,31 @@ def win_checker(grid_array, player_x, player_o):
             elif element == player_o:
                 player_o_counter += 1
         if player_x_counter == len(row):
-            return True, player_x
+            return 'player_x'
         elif player_o_counter == len(row):
-            return True, player_o
+            return 'player_o'
         else:
             player_o_counter = 0
             player_x_counter = 0
-    ## Check for vertical win, diagonal win ## 
+    return None
+
+def vertical_checker(grid_array, player_x, player_o):
+    return None
 
 
-    #####################################
-    return False, ''
+def diagonal_checker(grid_array, player_x, player_o):
+    return None
 
-def draw_checker(grid_array):
-    ## Check if it is a draw ##
-
-    return False
+def draw_checker(grid_array, player_x, player_o, max_val):
+    accumulator = 0
+    for row in grid_array:
+        for element in row:
+            if element == player_x or element == player_o:
+                accumulator += 1
+    if accumulator == max_val:
+        return 'draw'
+    else:
+        return None            
 
 if __name__ == '__main__':
     main()
