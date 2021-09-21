@@ -31,10 +31,14 @@ def main():
         number_chosen.append(x_selection)
         updated_grid = change_element(x_selection, grid, player_x)
         draw_grid(updated_grid, n_digits)
-        is_finished, winner = win_draw_checker(updated_grid, player_x, player_o)
+        is_finished, winner = win_checker(updated_grid, player_x, player_o)
+        is_draw = draw_checker(updated_grid)
         if is_finished:
             print(f"Congratulations player {winner}! You won the game")
-            break
+            game_finished = True
+        elif is_draw:
+            print(f"Thanks for playing the game. It is a draw")
+            game_finished = True
         
         incorrect_number = True
         o_selection = int(input(f"o's turn to choose a square (1-{max_val}): "))
@@ -50,10 +54,14 @@ def main():
         number_chosen.append(o_selection)
         updated_grid = change_element(o_selection, grid, player_o)
         draw_grid(updated_grid, n_digits) 
-        is_finished, winner = win_draw_checker(updated_grid, player_x, player_o)
+        is_finished, winner = win_checker(updated_grid, player_x, player_o)
+        is_draw = draw_checker(updated_grid)
         if is_finished:
             print(f"Congratulations player {winner}! You won the game")
-            break
+            game_finished = True
+        elif is_draw:
+            print(f"Thanks for playing the game. It is a draw")
+            game_finished = True
             
 
 
@@ -105,7 +113,7 @@ def change_element(number, grid_array, player):
                 row[element_index] = player
                 return grid_array
 
-def win_draw_checker(grid_array, player_x, player_o):
+def win_checker(grid_array, player_x, player_o):
     player_x_counter = 0
     player_o_counter = 0
     for row in grid_array:
@@ -121,12 +129,16 @@ def win_draw_checker(grid_array, player_x, player_o):
         else:
             player_o_counter = 0
             player_x_counter = 0
-    ## Check for vertical win, diagonal win, or draw ## 
+    ## Check for vertical win, diagonal win ## 
 
 
     #####################################
     return False, ''
 
+def draw_checker(grid_array):
+    ## Check if it is a draw ##
+
+    return False
 
 if __name__ == '__main__':
     main()
