@@ -31,7 +31,7 @@ def main():
         number_chosen.append(x_selection)
         updated_grid = change_element(x_selection, grid, player_x)
         draw_grid(updated_grid, n_digits)
-        is_finished, winner = win_checker(updated_grid, player_x, player_o)
+        is_finished, winner = win_draw_checker(updated_grid, player_x, player_o)
         if is_finished:
             print(f"Congratulations player {winner}! You won the game")
             break
