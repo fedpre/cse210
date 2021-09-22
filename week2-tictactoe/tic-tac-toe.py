@@ -1,6 +1,7 @@
 # Assignment "Tic-Tac-Toe" by Federico Pregnolato
 # Create a Tic-Tac-Toe game to play in Python
 import math
+from typing import Counter
 
 def main():
     grid_squared = int(input('How many squares do you want on your grid? '))
@@ -36,12 +37,15 @@ def main():
         if status == 'player_x':
             print(f"Congratulations player X! You won the game")
             game_finished = True
+            break
         elif status == 'player_o':
             print(f"Congratulations player X! You won the game")
             game_finished = True
+            break
         elif status == 'draw':
             print('Draw. Thanks for playing the game.')
             game_finished = True
+            break
         
         incorrect_number = True
         o_selection = int(input(f"o's turn to choose a square (1-{max_val}): "))
@@ -156,6 +160,23 @@ def horizontal_checker(grid_array, player_x, player_o):
     return None
 
 def vertical_checker(grid_array, player_x, player_o):
+    i = 0
+    counter_x = 0
+    counter_o = 0
+
+    for i in range(len(grid_array)):
+        for j in range(len(grid_array)):
+            if grid_array[j][i] == player_x:
+                counter_x += 1
+            elif grid_array[j][i] == player_o:
+                counter_o += 1
+        if counter_x == len(grid_array):
+            return 'player_x'
+        elif counter_o == len(grid_array):
+            return 'player_o'
+        counter_x = 0
+        counter_o = 0
+    
     return None
 
 
