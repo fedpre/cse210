@@ -70,7 +70,7 @@ def main():
             print(f"Congratulations player X! You won the game")
             game_finished = True
         elif status == 'player_o':
-            print(f"Congratulations player X! You won the game")
+            print(f"Congratulations player O! You won the game")
             game_finished = True
         elif status == 'draw':
             print('Draw. Thanks for playing the game.')
@@ -126,8 +126,9 @@ def change_element(number, grid_array, player):
 def status_checker(grid_array, player_x, player_o, max_val):
     result1 = horizontal_checker(grid_array, player_x, player_o)
     result2 = vertical_checker(grid_array, player_x, player_o)
-    result3 = diagonal_checker(grid_array, player_x, player_o)
-    result4 = draw_checker(grid_array, player_x, player_o, max_val)
+    result3 = lr_diagonal_checker(grid_array, player_x, player_o)
+    result4 = rl_diagonal_checker(grid_array, player_x, player_o)
+    result5 = draw_checker(grid_array, player_x, player_o, max_val)
     
     if result1 != None:
         return result1
@@ -136,6 +137,8 @@ def status_checker(grid_array, player_x, player_o, max_val):
     elif result3 != None:
         return result3
     elif result4 != None:
+        return result4
+    elif result5 != None:
         return result4
     else:
         return None
@@ -180,7 +183,40 @@ def vertical_checker(grid_array, player_x, player_o):
     return None
 
 
-def diagonal_checker(grid_array, player_x, player_o):
+def lr_diagonal_checker(grid_array, player_x, player_o):
+    i = 0
+    counter_x = 0
+    counter_o = 0
+
+    for i in range(len(grid_array)):
+        if grid_array[i][i] == player_x:
+            counter_x += 1
+        elif grid_array[i][i] == player_o:
+            counter_o += 1
+    if counter_x == len(grid_array):
+        return 'player_x'
+    elif counter_o == len(grid_array):
+        return 'player_o'
+
+
+    return None
+
+def rl_diagonal_checker(grid_array, player_x, player_o):
+    i = 0
+    counter_x = 0
+    counter_o = 0
+
+    for i in range(len(grid_array)):
+        if grid_array[i][(len(grid_array)-1)-i] == player_x:
+            counter_x += 1
+        elif grid_array[i][i] == player_o:
+            counter_o += 1
+    if counter_x == len(grid_array):
+        return 'player_x'
+    elif counter_o == len(grid_array):
+        return 'player_o'
+
+
     return None
 
 def draw_checker(grid_array, player_x, player_o, max_val):
